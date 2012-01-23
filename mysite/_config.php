@@ -49,3 +49,4 @@ $coreCache = Zend_Cache::factory(
 );
 
 Zend_Date::setOptions(array('cache' => $coreCache));
+
