@@ -6,6 +6,8 @@ class RiskWorksheet extends DataObject {
 		'Context'		=> 'Text'
 	);
 	
+	// think these are actually defined in the workflow
+	
 	public function getFrontendFields(){
 		$fields = new FieldSet(array(
 			new TextField('Title', 'Title'),
@@ -14,6 +16,12 @@ class RiskWorksheet extends DataObject {
 			new HiddenField('ID', 'ID')
 		));
 		return $fields;
+	}
+	
+	public function getFrontendActions(){
+		$actions = new FieldSet(array());
+		$this->extend('updateFrontendActions', $actions);
+		return $actions;
 	}
 	
 	public function getRequiredFields(){

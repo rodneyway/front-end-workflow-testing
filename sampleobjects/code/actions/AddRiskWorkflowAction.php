@@ -1,12 +1,6 @@
 <?php
-/**
- * A workflow action that notifies users attached to the workflow path that they have a task awaiting them.
- *
- * @license    BSD License (http://silverstripe.org/bsd-license/)
- * @package    advancedworkflow
- * @subpackage actions
- */
-class EditWorksheetsWorkflowAction extends WorkflowAction {
+
+class AddRiskWorkflowAction extends WorkflowAction{
 
 	public static $db = array(
 
@@ -21,6 +15,7 @@ class EditWorksheetsWorkflowAction extends WorkflowAction {
 	}
 
 	public function execute(WorkflowInstance $workflow) {
+		Debug::show('here executing the add risk stuff');
 		return true;
 	}
 
