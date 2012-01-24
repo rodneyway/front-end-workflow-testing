@@ -2,7 +2,6 @@
 class WorksheetController extends FrontendWorkflowController {
 
 	public function index() {
-		$this->Form = $this->WorksheetForm();
 		return $this->renderWith(array('Page'));
 	}
 
@@ -10,7 +9,6 @@ class WorksheetController extends FrontendWorkflowController {
 		$svc = singleton('WorkflowService');
 		
 		$active = $svc->getWorkflowFor($this->getContextObject());
-		Debug::show($active);
 		$current = $active->CurrentAction();
 		$wfFields = $active->getWorkflowFields(); 
 		
@@ -67,7 +65,7 @@ class WorksheetController extends FrontendWorkflowController {
 	
 	function edit() {
 		$this->Form = $this->WorksheetForm();	
-		return array();
+		return $this->renderWith(array('Page'));
 	}	
 		
 	
