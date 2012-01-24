@@ -16,11 +16,7 @@ class RiskWorksheet extends DataObject {
 		return $fields;
 	}
 	
-	public function getRequiredFields() {
-		return array();
-	}
-	
-	public function getFrontendValidator(){
+	public function getRequiredFields(){
 		$validator = new RequiredFields(array('Title'));
 		return $validator;
 	}
