@@ -3,7 +3,11 @@ class WorksheetController extends FrontendWorkflowController {
 
 	public function handleAction($request){
 		
+		//Debug::show($request);
 		// do stuff here to handle workflow defined actions
+		
+		Debug::show($request);
+		//Debug::show($request->param('Action'));
 		
 		return parent::handleAction($request);
 	}
@@ -24,40 +28,20 @@ class WorksheetController extends FrontendWorkflowController {
 	}
 	
 	function edit() {
-		$this->Form = $this->WorksheetForm();	
 		return $this->renderWith(array('Page'));
 	}
-	
-	
-
-	public function WorksheetForm(){
-		$svc = singleton('WorkflowService');
-		
-		$active = $svc->getWorkflowFor($this->getContextObject());
-	
-		$current = $active->CurrentAction();
-		$wfFields = $active->getFrontEndWorkflowFields(); 
-		
-		$fields = $wfFields;
-		$actions = new FieldSet();
-		$validator = singleton('RiskWorksheet')->getRequiredFields();
-                
-		$this->extend('updateFrontendActions', $actions);
-		$this->extend('updateFrontendFields', $fields);
-                
-		$form = new Form($this, 'WorksheetForm', $fields, $actions, $validator);
-                
-		return $form;
-	}
-	
-	
 	
 	public function Link($action = null){
     	return 'worksheets/' . $action;
 	}
 		
 	function getContextType() {
-		return 'RiskWorksheet';
+		//if($this->request->param('Action') == 'addrisk'){
+		//	return 'Risk';
+		//}else{
+			return 'RiskWorksheet';
+		//}
+		
 	}
 	
 	function getContextObject() {
@@ -66,7 +50,7 @@ class WorksheetController extends FrontendWorkflowController {
 	}
 	
 	function getContextID() {
-		$id = $this->request->param('ID');
+		$id = $this->request->param('ID') ? $this->request->param('ID') : $this->request->postVar('ID');
 		return $id;
 	}
 	
@@ -78,5 +62,9 @@ class WorksheetController extends FrontendWorkflowController {
 			return DataObject::get_by_id('WorkflowDefinition', $id);
 		}
 	}	
+	
+	public function SiteConfig(){
+		return SiteConfig::current_site_config();
+	}
 	
 }
