@@ -1,27 +1,34 @@
 <?php
 class WorksheetController extends FrontendWorkflowController {
 
+	public function handleAction($request){
+		
+		//Debug::show($request);
+		// do stuff here to handle workflow defined actions
+		
+		Debug::show($request);
+		//Debug::show($request->param('Action'));
+		
+		return parent::handleAction($request);
+	}
+	
 	public function index() {
 		return $this->renderWith(array('Page'));
 	}
+	
+	function start() {
+		$ws = new RiskWorksheet();
+		$ws->WorkflowDefinitionID = SiteConfig::current_site_config()->RiskAssessmentWorkflowID;
+		$ws->write();
 
-	public function WorksheetForm(){
 		$svc = singleton('WorkflowService');
+		$svc->startWorkflow($ws);
 		
-		$active = $svc->getWorkflowFor($this->getContextObject());
-		$current = $active->CurrentAction();
-		$wfFields = $active->getWorkflowFields(); 
-		
-		$fields = $wfFields;
-		$actions = new FieldSet();
-		$validator = singleton('RiskWorksheet')->getRequiredFields();
-                
-		$this->extend('updateFrontendActions', $actions);
-		$this->extend('updateFrontendFields', $fields);
-                
-		$form = new Form($this, 'BusinessForm', $fields, $actions, $validator);
-                
-		return $form;
+		$this->redirect($this->Link('edit/'.$ws->ID));
+	}
+	
+	function edit() {
+		return $this->renderWith(array('Page'));
 	}
 	
 	public function Link($action = null){
@@ -29,7 +36,12 @@ class WorksheetController extends FrontendWorkflowController {
 	}
 		
 	function getContextType() {
-		return 'RiskWorksheet';
+		//if($this->request->param('Action') == 'addrisk'){
+		//	return 'Risk';
+		//}else{
+			return 'RiskWorksheet';
+		//}
+		
 	}
 	
 	function getContextObject() {
@@ -38,7 +50,7 @@ class WorksheetController extends FrontendWorkflowController {
 	}
 	
 	function getContextID() {
-		$id = $this->request->param('ID');
+		$id = $this->request->param('ID') ? $this->request->param('ID') : $this->request->postVar('ID');
 		return $id;
 	}
 	
@@ -46,25 +58,13 @@ class WorksheetController extends FrontendWorkflowController {
 	
 	/* Provide method for possible different use cases */
 	function getWorkflowDefinition() {
-		//siteconfig for us
-	}
-	
-	function start() {
-		$ws = new RiskWorksheet();
-		$ws->WorkflowDefinitionID = SiteConfig::current_site_config()->RiskAssessmentWorkflowID;
-		
-		$ws->write();
-
-		$svc = singleton('WorkflowService');
-		$svc->startWorkflow($ws);
-				
-		$this->redirect($this->Link('edit/'.$ws->ID));
-	}
-	
-	function edit() {
-		$this->Form = $this->WorksheetForm();	
-		return $this->renderWith(array('Page'));
+		if($id = $this->SiteConfig()->RiskAssessmentWorkflowID){
+			return DataObject::get_by_id('WorkflowDefinition', $id);
+		}
 	}	
-		
+	
+	public function SiteConfig(){
+		return SiteConfig::current_site_config();
+	}
 	
 }

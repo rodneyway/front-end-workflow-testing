@@ -1,12 +1,6 @@
 <?php
-/**
- * A workflow action that notifies users attached to the workflow path that they have a task awaiting them.
- *
- * @license    BSD License (http://silverstripe.org/bsd-license/)
- * @package    advancedworkflow
- * @subpackage actions
- */
-class EditWorksheetsWorkflowAction extends WorkflowAction {
+
+class SubmitWorksheetWorkflowAction extends WorkflowAction{
 
 	public static $db = array(
 
