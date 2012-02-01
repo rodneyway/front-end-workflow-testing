@@ -5,9 +5,23 @@ class WorksheetController extends FrontendWorkflowController {
 		
 		//Debug::show($request);
 		// do stuff here to handle workflow defined actions
+				
+		$vars = $request->postVars();
+		$transPrefix = 'action_transition_';
 		
-		Debug::show($request);
+		foreach ($vars as $k => $v) {
+			if (substr_count($k, $transPrefix)) {
+				$transitionID = (int)str_replace($transPrefix, '', $k);
+			}
+		}
+		
+		if (isset($transitionID)) {
+			//do stuff here...
+		}
+		
+		Debug::show($request->allParams());
 		//Debug::show($request->param('Action'));
+		
 		
 		return parent::handleAction($request);
 	}
@@ -45,17 +59,18 @@ class WorksheetController extends FrontendWorkflowController {
 	}
 	
 	function getContextObject() {
+		
+		//@todo handle scendario where context id is not return (ie. list page /worksheets)
+		
 		$obj = DataObject::get_by_id($this->getContextType(),$this->getContextID());
-		return $obj;	
+		return $obj;
 	}
 	
 	function getContextID() {
 		$id = $this->request->param('ID') ? $this->request->param('ID') : $this->request->postVar('ID');
 		return $id;
 	}
-	
-	//workflowservice::getWorkflowForm
-	
+		
 	/* Provide method for possible different use cases */
 	function getWorkflowDefinition() {
 		if($id = $this->SiteConfig()->RiskAssessmentWorkflowID){
