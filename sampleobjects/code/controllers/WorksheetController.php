@@ -2,27 +2,8 @@
 class WorksheetController extends FrontendWorkflowController {
 
 	public function handleAction($request){
-		
-		//Debug::show($request);
 		// do stuff here to handle workflow defined actions
 				
-		$vars = $request->postVars();
-		$transPrefix = 'action_transition_';
-		
-		foreach ($vars as $k => $v) {
-			if (substr_count($k, $transPrefix)) {
-				$transitionID = (int)str_replace($transPrefix, '', $k);
-			}
-		}
-		
-		if (isset($transitionID)) {
-			//do stuff here...
-		}
-		
-		Debug::show($request->allParams());
-		//Debug::show($request->param('Action'));
-		
-		
 		return parent::handleAction($request);
 	}
 	
@@ -76,7 +57,17 @@ class WorksheetController extends FrontendWorkflowController {
 		if($id = $this->SiteConfig()->RiskAssessmentWorkflowID){
 			return DataObject::get_by_id('WorkflowDefinition', $id);
 		}
-	}	
+	}
+	
+	public function save($data, $form) {
+		//save form data here...
+		
+		$x=1;
+		
+		
+		
+		
+	}
 	
 	public function SiteConfig(){
 		return SiteConfig::current_site_config();
