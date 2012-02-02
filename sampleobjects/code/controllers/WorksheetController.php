@@ -85,13 +85,24 @@ class WorksheetController extends FrontendWorkflowController {
 		//Only Save data when Transition is 'Active'	
 		if ($this->getCurrentTransition()->Type == 'Active') {
 			if ($obj->canEdit()) {
-				$form->saveInto($obj,$data);
+				$form->saveInto($obj);
 				$obj->write();
 			}
 		}
 		
-		$debugger='pause';
-		//finished saving (or not), then hand back to WorkFlowInstance???
+		//run execute on instance		
+		$action = $this->contextObj->getWorkflowInstance()->currentAction();
+		$action->BaseAction()->execute($this->contextObj->getWorkflowInstance());
+		
+		//get valid transitions
+		$transitions = $action->getValidTransitions();
+		
+		//tell instance to execute transition
+		if ($transitions->find('ID',$this->transitionID)) {
+			$this->contextObj->getWorkflowInstance()->performTransition($this->getCurrentTransition());
+		}
+		
+		$this->redirect($this->contextObj->EditLink());
 	}
 	
 	public function SiteConfig(){

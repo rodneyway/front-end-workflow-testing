@@ -45,19 +45,19 @@ class RiskWorksheet extends DataObject {
 	}
 	
 	public function Link(){
-		return RiskWorksheetController::Link('view/' . $this->ID);
+		return WorksheetController::Link('view/' . $this->ID);
 	}
 	
 	public function EditLink(){
-		return RiskWorksheetController::Link('edit/' . $this->ID);
+		return WorksheetController::Link('edit/' . $this->ID);
 	}
 	
 	public function AddRiskLink(){
-		return RiskWorksheetController::Link('addrisk/' . $this->ID);
+		return WorksheetController::Link('addrisk/' . $this->ID);
 	}
 	
 	public function SubmitLink(){
-		return RiskWorksheetController::Link('submitworksheet/' . $this->ID);
+		return WorksheetController::Link('submitworksheet/' . $this->ID);
 	}
 	
 }
