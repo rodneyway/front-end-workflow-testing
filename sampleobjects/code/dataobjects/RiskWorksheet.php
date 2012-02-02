@@ -24,6 +24,21 @@ class RiskWorksheet extends DataObject {
 		return $actions;
 	}
 	
+	/*
+	 *  @todo implement canView function
+	 */
+	public function canView() {
+		return true;
+	}
+	
+	/*
+	 *  @todo implement canEdit function
+	 */
+	public function canEdit() {
+		return true;
+	}
+	
+	
 	public function getRequiredFields(){
 		$validator = new RequiredFields(array('Title'));
 		return $validator;

@@ -1,6 +1,6 @@
 <?php
 class WorksheetController extends FrontendWorkflowController {
-
+	
 	public function handleAction($request){
 		// do stuff here to handle workflow defined actions
 				
@@ -40,15 +40,31 @@ class WorksheetController extends FrontendWorkflowController {
 	}
 	
 	function getContextObject() {
+		if (!$this->contextObj) {
+			$id = $this->getContextID();
+			
+			if ($id) {
+				$cType = $this->getContextType();
+				$cObj = DataObject::get_by_id($cType, $id);
+					
+				$this->contextObj = $cObj->canView() ? $cObj : null;
+			}
+		}
 		
-		//@todo handle scendario where context id is not return (ie. list page /worksheets)
-		
-		$obj = DataObject::get_by_id($this->getContextType(),$this->getContextID());
-		return $obj;
+		return $this->contextObj;
 	}
 	
 	function getContextID() {
-		$id = $this->request->param('ID') ? $this->request->param('ID') : $this->request->postVar('ID');
+		$id = $this->contextObj ? $this->contextObj->ID : null;
+		
+		if (!$id) {
+			if ($this->request->param('ID')) {
+				$id = (int) $this->request->param('ID');
+			} else if ($this->request->requestVar('ID')) {
+				$id = (int) $this->request->requestVar('ID');
+			}
+		}
+		
 		return $id;
 	}
 		
@@ -59,14 +75,23 @@ class WorksheetController extends FrontendWorkflowController {
 		}
 	}
 	
-	public function save($data, $form) {
-		//save form data here...
+	public function save(array $data, Form $form, SS_HTTPRequest $request) {
+		$obj = $this->getContextObject();
 		
-		$x=1;
+		if (!$obj) {
+			throw new Exception('Context Object Not Found');
+		}
 		
+		//Only Save data when Transition is 'Active'	
+		if ($this->getCurrentTransition()->Type == 'Active') {
+			if ($obj->canEdit()) {
+				$form->saveInto($obj,$data);
+				$obj->write();
+			}
+		}
 		
-		
-		
+		$debugger='pause';
+		//finished saving (or not), then hand back to WorkFlowInstance???
 	}
 	
 	public function SiteConfig(){
