@@ -19,12 +19,7 @@ class SubmitWorksheetWorkflowAction extends WorkflowAction{
 	}
 
 	public function updateFrontendWorkflowFields($fields, $workflow){
-		$dofields = $workflow->getTarget()->getFrontendFields();
-		
-		foreach ($dofields as $field) {
-			$fields->push($field);
-		}
-		return $fields;
+		//don't need to add any fields here...
 	}
 
 }

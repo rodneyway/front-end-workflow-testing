@@ -8,9 +8,13 @@ class WorksheetController extends FrontendWorkflowController {
 	}
 	
 	public function index() {
-		return $this->renderWith(array('Page'));
+		return $this->renderWith(array('RiskWorksheetPage','Page'));
 	}
 	
+	public function RiskWorksheetList() {
+		return DataObject::get('RiskWorksheet');
+	}
+		
 	function start() {
 		$ws = new RiskWorksheet();
 		$ws->WorkflowDefinitionID = SiteConfig::current_site_config()->RiskAssessmentWorkflowID;
@@ -19,11 +23,11 @@ class WorksheetController extends FrontendWorkflowController {
 		$svc = singleton('WorkflowService');
 		$svc->startWorkflow($ws);
 		
-		$this->redirect($this->Link('edit/'.$ws->ID));
+		$this->redirect($ws->EditLink());
 	}
 	
 	function edit() {
-		return $this->renderWith(array('Page'));
+		return $this->renderWith(array('RiskWorksheetPage_edit','Page'));
 	}
 	
 	public function Link($action = null){
